@@ -15,8 +15,4 @@ jobs:
 workflows:
   colony:
     jobs:
-      - build-and-test:
-          filters:
-            branches:
-              only:
-                - develop
+      - build-and-test
