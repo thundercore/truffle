@@ -5,6 +5,7 @@ jobs:
   build-and-test-COLONY:
     executor:
       name: node/default
+      tag: '10.20'
     steps:
       - checkout
       - run: yarn bootstrap
