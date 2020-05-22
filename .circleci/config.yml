@@ -8,7 +8,7 @@ jobs:
     steps:
       - checkout
       - run: yarn bootstrap
-      - run: truffle obtain --solc=0.5.16
+      - run: npx truffle obtain --solc=0.5.16
       - run: COLONY=true yarn ci
 
 workflows:
