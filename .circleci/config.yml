@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@2.1.1
 jobs:
-  build-and-test:
+  build-and-test-COLONY:
     executor:
       name: node/default
     steps:
@@ -15,4 +15,4 @@ jobs:
 workflows:
   colony:
     jobs:
-      - build-and-test
+      - build-and-test-COLONY
