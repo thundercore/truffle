@@ -8,6 +8,7 @@ jobs:
       tag: '10.20'
     steps:
       - checkout
+      - setup_remote_docker
       - run: yarn bootstrap
       - run: npx truffle obtain --solc=0.5.16
       - run: COLONY=true yarn ci
