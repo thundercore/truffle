@@ -1,6 +1,8 @@
 version: 2.1
+
 orbs:
   node: circleci/node@2.1.1
+
 jobs:
   build-and-test-COLONY:
     executor:
@@ -13,11 +15,33 @@ jobs:
       - run: npx truffle obtain --solc=0.5.16
       - run: COLONY=true yarn ci
 
+  build-and-test-COVERAGE:
+    executor:
+      name: node/default
+      tag: '8.17'
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: yarn bootstrap
+      - run: npx truffle obtain --solc=0.5.16
+      - run: COVERAGE=true yarn ci
+
 workflows:
-  colony:
+  build-and-test:
     jobs:
       - build-and-test-COLONY:
           filters:
             branches:
               only:
                 - develop
+      - build-and-test-COVERAGE:
+          filters:
+            branches:
+              only:
+                # long-lived branches
+                - master
+                - develop
+                - next
+
+                # other targets
+                - truffle-db
