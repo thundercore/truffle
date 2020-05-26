@@ -45,3 +45,4 @@ workflows:
 
                 # other targets
                 - truffle-db
+                - travis-to-circle-coverage
