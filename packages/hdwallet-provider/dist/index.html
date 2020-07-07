@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>HDWallet Provider Browser Test</title>
+<script src="hdwallet-provider.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.8/web3.js"></script>
+<script>
+const onLoad = (async () => {
+	//const rpcUrl = 'https://mainnet-rpc.thundercore.com';
+	const rpcUrl = 'http://core7fef.local:8545';
+	const privateKey = '0xc23c1448f6e44951eea6bfb99b20b0bcf9d04dcec86bf18b8e18467c4b78dfb0';
+	const privateKeys = [ privateKey ];
+	let blockNumber;
+	let balance;
+	let receipt;
+	let error = null;
+	try {
+		const provider = new HDWalletProvider(privateKeys, 'https://mainnet-rpc.thundercore.com', 0 /* key index */, privateKeys.length);
+		const web3 = new Web3(provider);
+		web3.eth.transactionConfirmationBlocks = 1;
+		web3.eth.transactionPollingTimeout = 1.0;
+		const account = web3.eth.accounts.privateKeyToAccount(privateKey);
+		const address = account.address;
+		blockNumber = await web3.eth.getBlockNumber();
+		console.log('blockNumber:', blockNumber);
+		balance = await web3.eth.getBalance(address);
+		console.log('balance:', balance);
+		const gasPrice = 1*1000*1000*1000;
+		const nonce = await web3.eth.getTransactionCount(address);
+		const tx = {
+			from: address,
+			to: address,
+			value: 0,
+			gas: 21000,
+			gasPrice: gasPrice,
+			nonce: nonce,
+			data: '',
+		};
+		receipt = await web3.eth.sendTransaction(tx);
+	} catch (e) {
+		error = e;
+	}
+	if (error) {
+		const messageDom = document.getElementById('message');
+		messageDom.innerText = `Exception occurred while interacting with chain:\n${error}`
+	} else {
+		const txnHash = receipt.transactionHash;
+		console.log('receipt:', receipt);
+		const testDom = document.getElementById('test');
+		testDom.innerHTML = `<div>Balance: ${balance}</div><div>Transaction: <a href="https://scan.thundercore.com/transactions/${txnHash}">${txnHash}</a></div>`;
+	}
+});
+window.addEventListener('DOMContentLoaded', function () {
+	onLoad();
+});
+</script>
+</head>
+<body>
+<div id="test"></div>
+<div id="message"></div>
+</body>
+</html>

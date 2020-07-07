@@ -1,4 +1,4 @@
-import "source-map-support/register";
+//import "source-map-support/register";
 import * as bip39 from "bip39";
 import * as EthUtil from "ethereumjs-util";
 import ethJSWallet from "ethereumjs-wallet";
@@ -40,6 +40,7 @@ class HDWalletProvider {
     shareNonce: boolean = true,
     walletHdpath: string = `m/44'/60'/0'/0/`
   ) {
+    console.log('HDWalletProvider: ctor: called');
     this.walletHdpath = walletHdpath;
     this.wallets = {};
     this.addresses = [];
@@ -195,6 +196,7 @@ class HDWalletProvider {
     payload: JSONRPCRequestPayload,
     callback: JSONRPCErrorCallback | Callback<JsonRPCResponse>
   ): void {
+    console.log(`HDWalletProvider.send: payload: "${JSON.stringify(payload)}"`);
     return this.engine.send.call(this.engine, payload, callback);
   }
 
@@ -202,6 +204,7 @@ class HDWalletProvider {
     payload: JSONRPCRequestPayload,
     callback: JSONRPCErrorCallback | Callback<JsonRPCResponse>
   ): void {
+    console.log(`HDWalletProvider.sendAsync: payload: "${JSON.stringify(payload)}"`);
     this.engine.sendAsync.call(this.engine, payload, callback);
   }
 
@@ -230,3 +233,4 @@ class HDWalletProvider {
 }
 
 export = HDWalletProvider;
+window['HDWalletProvider'] = HDWalletProvider;
